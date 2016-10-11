@@ -6,24 +6,42 @@ package com.ojdudu.popularmovies;
 
 public class Movie {
 
-    private final String name;
-
-
-    public Movie(String name) {
-        this.name = name;
-    }
+    /**
+     * Movie title.
+     */
+    private final String title;
 
     /**
-     * @return Movie name.
+     * Address for movie background picture.
      */
-    public String getName() {
-        return name;
+    private final String backdropAddress;
+
+
+    public Movie(String title, String backdropAddress) {
+        this.title = title;
+        this.backdropAddress = backdropAddress;
     }
+
 
     @Override
     public String toString() {
         return "Movie{" +
-                "name='" + name + '\'' +
+                "title='" + title + '\'' +
+                ", backdropAddress='" + backdropAddress + '\'' +
                 '}';
+    }
+
+    /**
+     * @return Movie background image url.
+     */
+    public String getBackdropAddress() {
+        return backdropAddress;
+    }
+
+    /**
+     * @return Movie title.
+     */
+    public String getTitle() {
+        return title;
     }
 }
