@@ -12,14 +12,14 @@ public class Movie {
     private final String title;
 
     /**
-     * Address for movie background picture.
+     * Address for movie posterpicture.
      */
-    private final String backdropAddress;
+    private final String posterURL;
 
 
     public Movie(String title, String backdropAddress) {
         this.title = title;
-        this.backdropAddress = backdropAddress;
+        this.posterURL = backdropAddress;
     }
 
 
@@ -27,15 +27,15 @@ public class Movie {
     public String toString() {
         return "Movie{" +
                 "title='" + title + '\'' +
-                ", backdropAddress='" + backdropAddress + '\'' +
+                ", posterURL='" + posterURL + '\'' +
                 '}';
     }
 
     /**
      * @return Movie background image url.
      */
-    public String getBackdropAddress() {
-        return backdropAddress;
+    public String getPosterURL() {
+        return posterURL;
     }
 
     /**

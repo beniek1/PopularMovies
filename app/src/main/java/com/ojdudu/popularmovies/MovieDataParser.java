@@ -1,5 +1,6 @@
 package com.ojdudu.popularmovies;
 
+import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -28,7 +29,7 @@ public class MovieDataParser {
      * Constants for parsing The Movie Database JSON String.
      */
     private static final String RESULTS = "results";
-    private static final String BACKDROP_PATH = "backdrop_path";
+    private static final String POSTER_PATH = "poster_path";
     private static final String TITLE = "title";
 
     /**
@@ -81,12 +82,22 @@ public class MovieDataParser {
      */
     private static Movie getMovieDataFromJSON(JSONObject movie) throws JSONException {
 
-        String backdropPath = movie.getString(BACKDROP_PATH);
+//        String backdropPath = "http://image.tmdb.org/t/p/" + "/w185/" + movie.getString(POSTER_PATH);
         String title = movie.getString(TITLE);
 
+        Uri.Builder uriBuilder = new Uri.Builder();
+        uriBuilder.scheme("http")
+                .authority("image.tmdb.org")
+                .appendPath("t")
+                .appendPath("p")
+                .appendPath("w185")
+                .appendPath(movie.getString(POSTER_PATH).substring(1)); // Trim first character /
 
-        Log.v(LOG_TAG, String.format("Creating new movie object: %s / %s", title, backdropPath));
-        return new Movie(title, backdropPath);
+        String imageUrl = uriBuilder.build().toString();
+
+
+        Log.v(LOG_TAG, String.format("Creating new movie object: %s / %s", title, imageUrl));
+        return new Movie(title, imageUrl);
 
 
     }

@@ -32,7 +32,7 @@ public class MainMovieActivity extends AppCompatActivity {
 
         moviePosterGridView = (GridView) findViewById(R.id.movie_posters_view);
 
-        movieAdapter = new ImageAdapter(this);
+//        movieAdapter = new ImageAdapter(null, this);
         moviePosterGridView.setAdapter(movieAdapter);
 
 
@@ -155,6 +155,12 @@ public class MainMovieActivity extends AppCompatActivity {
             String url = uriBuilder.build().toString();
             return new URL(url);
 
+        }
+
+        @Override
+        protected void onPostExecute(List<Movie> movies) {
+
+            movieAdapter = new ImageAdapter(movies, MainMovieActivity.this);
         }
     }
 

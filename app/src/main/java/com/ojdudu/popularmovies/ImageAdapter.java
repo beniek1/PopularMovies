@@ -7,20 +7,28 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
 /**
  * Adapter used for displaying movie posters.
  */
 
 public class ImageAdapter extends BaseAdapter {
 
+    private List<Movie> movies;
+
     private Context mContext;
 
-    public ImageAdapter(Context c) {
-        mContext = c;
+    public ImageAdapter(List<Movie> movies, Context context) {
+        this.movies = movies;
+        this.mContext = context;
     }
 
+    //HOW TO IMPLEMENT?
     public int getCount() {
-        return mThumbIds.length;
+        return movies.size();
     }
 
     public Object getItem(int position) {
@@ -44,25 +52,11 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(mThumbIds[position]);
+        Picasso.with(mContext).load(movies.get(position).getPosterURL()).into(imageView);
         return imageView;
     }
 
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.icon_1,
-            R.drawable.icon_2,
-            R.drawable.icon_1,
-            R.drawable.icon_2,
-            R.drawable.icon_1,
-            R.drawable.icon_2,
-            R.drawable.icon_1,
-            R.drawable.icon_2,
-            R.drawable.icon_1,
-            R.drawable.icon_2,
-            R.drawable.icon_1,
-            R.drawable.icon_2,
-    };
+
 }
 
 
