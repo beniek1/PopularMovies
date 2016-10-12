@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ViewFlipper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,9 +23,23 @@ import java.util.List;
 
 public class MainMovieActivity extends AppCompatActivity {
 
+    /**
+     * Main grid view for movie poster display.
+     */
     GridView moviePosterGridView;
 
+    /**
+     * Movie poster image adapter.
+     */
     BaseAdapter movieAdapter;
+
+    /**
+     * Used for hiding/showing warning text about no data connection.
+     */
+    ViewFlipper viewFlipper;
+
+    boolean isMovieGridFlipped = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +47,23 @@ public class MainMovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_movie);
 
         moviePosterGridView = (GridView) findViewById(R.id.movie_posters_view);
+        viewFlipper = (ViewFlipper) findViewById(R.id.view_flipper);
 
-//        movieAdapter = new ImageAdapter(null, this);
-        moviePosterGridView.setAdapter(movieAdapter);
+        initializeDownload();
 
+    }
 
-
+    /**
+     * Initializes data download task.
+     */
+    private void initializeDownload() {
+        new MovieDataDownloader().execute();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_refresh){
-            new MovieDataDownloader().execute();
+        if (item.getItemId() == R.id.menu_refresh) {
+            initializeDownload();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -54,10 +75,14 @@ public class MainMovieActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    public void retryConnection(View view) {
+        initializeDownload();
+    }
+
     /**
      * Used for downloading movie information separate from UI thread.
      */
-    class MovieDataDownloader extends AsyncTask<Void, Void, List<Movie>>{
+    class MovieDataDownloader extends AsyncTask<Void, Void, List<Movie>> {
 
 
         private final String LOG_TAG = MovieDataDownloader.class.getSimpleName();
@@ -113,8 +138,8 @@ public class MainMovieActivity extends AppCompatActivity {
             }
 
             try {
-                  Log.v(LOG_TAG, String.format("JSON Response:%s", movieJSONResponse));
-                  return MovieDataParser.getMoviesFromJson(movieJSONResponse);
+                Log.v(LOG_TAG, String.format("JSON Response:%s", movieJSONResponse));
+                return MovieDataParser.getMoviesFromJson(movieJSONResponse);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -160,7 +185,23 @@ public class MainMovieActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Movie> movies) {
 
-            movieAdapter = new ImageAdapter(movies, MainMovieActivity.this);
+            if (movies != null && movies.size() > 0) {
+                movieAdapter = new ImageAdapter(movies, MainMovieActivity.this);
+                moviePosterGridView.setAdapter(movieAdapter);
+                //Unflip the view.
+                if (isMovieGridFlipped) {
+                    viewFlipper.showPrevious();
+                    isMovieGridFlipped = false;
+                }
+
+            } else if(!isMovieGridFlipped) {
+                //Downloading data failed. No connection? Show user flipped view with text and Retry button.
+                viewFlipper.showNext();
+                isMovieGridFlipped = true;
+
+            }
+
+
         }
     }
 

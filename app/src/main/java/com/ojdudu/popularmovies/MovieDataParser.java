@@ -31,6 +31,7 @@ public class MovieDataParser {
     private static final String RESULTS = "results";
     private static final String POSTER_PATH = "poster_path";
     private static final String TITLE = "title";
+    public static final String POSTER_SIZE = "w185";
 
     /**
      * Formats rec
@@ -90,7 +91,7 @@ public class MovieDataParser {
                 .authority("image.tmdb.org")
                 .appendPath("t")
                 .appendPath("p")
-                .appendPath("w185")
+                .appendPath(POSTER_SIZE)
                 .appendPath(movie.getString(POSTER_PATH).substring(1)); // Trim first character /
 
         String imageUrl = uriBuilder.build().toString();
