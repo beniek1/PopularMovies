@@ -26,18 +26,21 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/check_connection"/>
+                android:layout_height="wrap_content"
+                android:text="@string/check_connection"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="24sp"/>
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="@string/retry"
-                android:onClick="retryConnection"
-                style="@style/Base.Widget.AppCompat.Button.Colored"/>
-        </LinearLayout>
-
+        <Button
+            android:layout_width="266dp"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"
+            android:layout_gravity="center"
+            android:onClick="retryConnection"
+            style="@style/Base.Widget.AppCompat.Button.Colored"/>
+    </LinearLayout>
 
 
 </ViewFlipper>
