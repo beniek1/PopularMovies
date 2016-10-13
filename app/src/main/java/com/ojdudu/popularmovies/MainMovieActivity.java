@@ -1,5 +1,6 @@
 package com.ojdudu.popularmovies;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
@@ -52,6 +54,8 @@ public class MainMovieActivity extends AppCompatActivity {
         viewFlipper = (ViewFlipper) findViewById(R.id.view_flipper);
 
         initializeDownload();
+
+        moviePosterGridView.setOnItemClickListener(new MoviePosterClickListener());
 
     }
 
@@ -229,4 +233,16 @@ public class MainMovieActivity extends AppCompatActivity {
         }
     }
 
+    private class MoviePosterClickListener implements android.widget.AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent startDetailActivityIntent = new Intent(MainMovieActivity.this, MovieDetailActivity.class);
+            Movie selectedMovie = (Movie) movieAdapter.getItem(position);
+            startDetailActivityIntent.putExtra(MovieDetailActivity.MOVIE_TITLE, selectedMovie.getTitle());
+            startActivity(startDetailActivityIntent);
+
+
+        }
+    }
 }
