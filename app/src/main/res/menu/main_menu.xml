@@ -3,8 +3,14 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/spinner"
+        android:title=""
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/menu_refresh"
-        android:title="Refresh"
+        android:title="@string/refresh"
         app:showAsAction="never">
 
     </item>
