@@ -31,12 +31,14 @@ public class MovieDataParser {
     private static final String RESULTS = "results";
     private static final String POSTER_PATH = "poster_path";
     private static final String TITLE = "title";
-    public static final String POSTER_SIZE = "w185";
+    private static final String POSTER_SIZE = "w185";
+    private static final String OVERVIEW = "overview";
+    private static final String RELEASE_DATE = "release_date";
+    private static final String RANKING = "vote_average";
 
     /**
-     * Formats rec
-     * @param movieJSONResponse
-     * @return
+     * Parses received JSON response
+     * @return List of Movie objects with data parsed from JSON.
      */
     public static List<Movie> getMoviesFromJson(String movieJSONResponse)
         throws Exception{
@@ -85,6 +87,9 @@ public class MovieDataParser {
 
 //        String backdropPath = "http://image.tmdb.org/t/p/" + "/w185/" + movie.getString(POSTER_PATH);
         String title = movie.getString(TITLE);
+        String overview = movie.getString(OVERVIEW);
+        String releaseDate = movie.getString(RELEASE_DATE);
+        double ranking = movie.getDouble(RANKING);
 
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("http")
@@ -96,9 +101,9 @@ public class MovieDataParser {
 
         String imageUrl = uriBuilder.build().toString();
 
-
-        Log.v(LOG_TAG, String.format("Creating new movie object: %s / %s", title, imageUrl));
-        return new Movie(title, imageUrl);
+        Movie movieObj = new Movie(title, imageUrl, overview, releaseDate, ranking);
+        Log.v(LOG_TAG, String.format("Created new movie object: %s", movieObj.toString()));
+        return movieObj;
 
 
     }

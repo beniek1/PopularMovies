@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
@@ -34,7 +33,7 @@ public class MainMovieActivity extends AppCompatActivity {
     /**
      * Movie poster image adapter.
      */
-    BaseAdapter movieAdapter;
+    ImageAdapter movieAdapter;
 
     /**
      * Used for hiding/showing warning text about no data connection.
@@ -63,22 +62,12 @@ public class MainMovieActivity extends AppCompatActivity {
         new MovieDataDownloader().execute();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_refresh) {
-            initializeDownload();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
         MenuItem item = menu.findItem(R.id.spinner);
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -86,6 +75,30 @@ public class MainMovieActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_refresh) {
+            initializeDownload();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+//    /**
+//     * Sorts currently displayed movie results.
+//     */
+//    private void sortResults() {
+//        List<Movie> movies = movieAdapter.getMovies();
+//        //TODO: Write custom comparator for comparing movie popularity and top ranking
+//        Toast.makeText(this, "This will sort results!", Toast.LENGTH_SHORT).show();
+//    }
+
+    private void assignMovieAdapter(List<Movie> movies) {
+        movieAdapter = new ImageAdapter(movies, MainMovieActivity.this);
+        moviePosterGridView.setAdapter(movieAdapter);
+    }
+
 
     public void retryConnection(View view) {
         initializeDownload();
@@ -109,7 +122,7 @@ public class MainMovieActivity extends AppCompatActivity {
             String movieJSONResponse = null;
 
             try {
-                urlConnection = getHttpURLConnection(urlConnection);
+                urlConnection = getHttpURLConnection();
 
 
                 // Read the input stream into a String
@@ -164,12 +177,12 @@ public class MainMovieActivity extends AppCompatActivity {
         /**
          * Generates and connects HttpURLConnection to The Movie Database.
          */
-        private HttpURLConnection getHttpURLConnection(HttpURLConnection urlConnection) throws IOException {
+        private HttpURLConnection getHttpURLConnection() throws IOException {
             //Creates URL with query for The Movie Database
             URL url = generateQueryURL();
 
             // Create the request to Movie, and open the connection
-            urlConnection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
             return urlConnection;
@@ -198,15 +211,14 @@ public class MainMovieActivity extends AppCompatActivity {
         protected void onPostExecute(List<Movie> movies) {
 
             if (movies != null && movies.size() > 0) {
-                movieAdapter = new ImageAdapter(movies, MainMovieActivity.this);
-                moviePosterGridView.setAdapter(movieAdapter);
+                assignMovieAdapter(movies);
                 //Unflip the view.
                 if (isMovieGridFlipped) {
                     viewFlipper.showPrevious();
                     isMovieGridFlipped = false;
                 }
 
-            } else if(!isMovieGridFlipped) {
+            } else if (!isMovieGridFlipped) {
                 //Downloading data failed. No connection? Show user flipped view with text and Retry button.
                 viewFlipper.showNext();
                 isMovieGridFlipped = true;

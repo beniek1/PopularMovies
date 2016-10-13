@@ -12,14 +12,33 @@ public class Movie {
     private final String title;
 
     /**
-     * Address for movie posterpicture.
+     * Movie poster picture address.
      */
     private final String posterURL;
 
+    /**
+     * Movie plot synopsis.
+     */
+    private final String overview;
 
-    public Movie(String title, String backdropAddress) {
+    /**
+     * Movie release date.
+     */
+    private final String releaseDate;
+
+    /**
+     * Movie average user ranking.
+     */
+    private final double ranking;
+
+
+
+    public Movie(String title, String backdropAddress, String overview, String releaseDate, double ranking) {
         this.title = title;
         this.posterURL = backdropAddress;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.ranking = ranking;
     }
 
 
@@ -28,6 +47,9 @@ public class Movie {
         return "Movie{" +
                 "title='" + title + '\'' +
                 ", posterURL='" + posterURL + '\'' +
+                ", overview='" + overview + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", ranking=" + ranking +
                 '}';
     }
 
@@ -43,5 +65,26 @@ public class Movie {
      */
     public String getTitle() {
         return title;
+    }
+
+    /**
+     * @return Movie plot synopsis (overview)
+     */
+    public String getOverview() {
+        return overview;
+    }
+
+    /**
+     * @return String representation of movie release date.
+     */
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    /**
+     * @return Movie average ranking.
+     */
+    public double getRanking() {
+        return ranking;
     }
 }

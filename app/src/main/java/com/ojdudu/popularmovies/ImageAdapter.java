@@ -26,7 +26,6 @@ public class ImageAdapter extends BaseAdapter {
         this.mContext = context;
     }
 
-    //HOW TO IMPLEMENT?
     public int getCount() {
         return movies.size();
     }
@@ -57,7 +56,9 @@ public class ImageAdapter extends BaseAdapter {
         return imageView;
     }
 
-
+    public List<Movie> getMovies() {
+        return movies;
+    }
 }
 
 
