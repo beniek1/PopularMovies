@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import java.io.BufferedReader;
@@ -23,6 +24,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainMovieActivity extends AppCompatActivity {
@@ -73,8 +76,9 @@ public class MainMovieActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.spinner);
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
+                R.array.sort_spinner_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setOnItemSelectedListener(new setOnItemSelectedListener());
 
         spinner.setAdapter(adapter);
         return super.onCreateOptionsMenu(menu);
@@ -89,14 +93,12 @@ public class MainMovieActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    /**
-//     * Sorts currently displayed movie results.
-//     */
-//    private void sortResults() {
-//        List<Movie> movies = movieAdapter.getMovies();
-//        //TODO: Write custom comparator for comparing movie popularity and top ranking
-//        Toast.makeText(this, "This will sort results!", Toast.LENGTH_SHORT).show();
-//    }
+    /**
+     * Sorts currently displayed movie results.
+     */
+    private void sortResults() {
+        Toast.makeText(this, "This will sort results!", Toast.LENGTH_SHORT).show();
+    }
 
     private void assignMovieAdapter(List<Movie> movies) {
         movieAdapter = new ImageAdapter(movies, MainMovieActivity.this);
@@ -242,6 +244,42 @@ public class MainMovieActivity extends AppCompatActivity {
             startDetailActivityIntent.putExtra(MovieDetailActivity.MOVIE, selectedMovie);
             startActivity(startDetailActivityIntent);
 
+
+        }
+    }
+
+    private class setOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+
+        /**
+         * Entry numbers in Sort Spinner Array.
+         */
+        public final int POPULARITY_NO = 0;
+        public final int RANKING_NO = 1;
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            if(movieAdapter == null){
+                return;
+            }
+            List<Movie> movies = movieAdapter.getMovies();
+            Comparator<Movie> sortComparator;
+            if(position == POPULARITY_NO){
+                sortComparator = new MoviePopularityComparator();
+
+            } else {
+                //position == RANKING_NO
+                sortComparator = new MovieRankingComparator();
+            }
+
+            Collections.sort(movies, sortComparator);
+            assignMovieAdapter(movies);
+
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
 
         }
     }

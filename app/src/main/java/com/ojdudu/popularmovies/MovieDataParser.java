@@ -35,6 +35,7 @@ public class MovieDataParser {
     private static final String OVERVIEW = "overview";
     private static final String RELEASE_DATE = "release_date";
     private static final String RANKING = "vote_average";
+    private static final String POPULARITY = "popularity";
 
     /**
      * Parses received JSON response
@@ -90,6 +91,7 @@ public class MovieDataParser {
         String overview = movie.getString(OVERVIEW);
         String releaseDate = movie.getString(RELEASE_DATE);
         double ranking = movie.getDouble(RANKING);
+        double popularity = movie.getDouble(POPULARITY);
 
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("http")
@@ -101,7 +103,7 @@ public class MovieDataParser {
 
         String imageUrl = uriBuilder.build().toString();
 
-        Movie movieObj = new Movie(title, imageUrl, overview, releaseDate, ranking);
+        Movie movieObj = new Movie(title, imageUrl, overview, releaseDate, ranking, popularity);
         Log.v(LOG_TAG, String.format("Created new movie object: %s", movieObj.toString()));
         return movieObj;
 

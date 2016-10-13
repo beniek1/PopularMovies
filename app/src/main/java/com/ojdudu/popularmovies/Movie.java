@@ -34,14 +34,21 @@ public class Movie implements Parcelable {
      */
     private final double ranking;
 
+    /**
+     * Movie popularity.
+     */
+    private final double popularity;
 
 
-    public Movie(String title, String posterURL, String overview, String releaseDate, double ranking) {
+
+    public Movie(String title, String posterURL, String overview, String releaseDate, double ranking,
+                 double popularity) {
         this.title = title;
         this.posterURL = posterURL;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.ranking = ranking;
+        this.popularity = popularity;
     }
 
     /**
@@ -54,6 +61,7 @@ public class Movie implements Parcelable {
         this.overview = in.readString();
         this.releaseDate = in.readString();
         this.ranking = in.readDouble();
+        this.popularity = in.readDouble();
     }
 
     //Unused
@@ -109,6 +117,13 @@ public class Movie implements Parcelable {
         return ranking;
     }
 
+    /**
+     * @return Movie popularity.
+     */
+    public double getPopularity() {
+        return popularity;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         //Write order needs to match read order!
@@ -117,6 +132,7 @@ public class Movie implements Parcelable {
         dest.writeString(this.overview);
         dest.writeString(this.releaseDate);
         dest.writeDouble(this.ranking);
+        dest.writeDouble(this.popularity);
 
     }
 

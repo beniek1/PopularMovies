@@ -35,7 +35,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     //TODO: IF screen vertical - more columns?
