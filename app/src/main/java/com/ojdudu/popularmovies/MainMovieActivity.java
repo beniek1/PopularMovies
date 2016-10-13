@@ -239,7 +239,7 @@ public class MainMovieActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent startDetailActivityIntent = new Intent(MainMovieActivity.this, MovieDetailActivity.class);
             Movie selectedMovie = (Movie) movieAdapter.getItem(position);
-            startDetailActivityIntent.putExtra(MovieDetailActivity.MOVIE_TITLE, selectedMovie.getTitle());
+            startDetailActivityIntent.putExtra(MovieDetailActivity.MOVIE, selectedMovie);
             startActivity(startDetailActivityIntent);
 
 
